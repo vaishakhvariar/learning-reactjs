@@ -2,7 +2,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-const list = [
+const stories = [
   {
     title: 'React',
     url: 'https://reactjs.org/',
@@ -20,6 +20,7 @@ const list = [
     objectID: 1,
   },
 ];
+
 const DisplayText = (props) => {
   const Element = props.elementType;
   console.log(Element);
@@ -28,7 +29,7 @@ const DisplayText = (props) => {
 
 
 DisplayText.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired, 
   elementType: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]).isRequired,
   // elementType: PropTypes.elementType.isRequired
 }
@@ -40,6 +41,8 @@ const sumOfNumbers = numbers.reduce(function (accumulator, number){
 }, 0);
 
 const App = () => {
+
+  
   return (
     <div>
       <h1>My Hacker Stories</h1>
@@ -48,9 +51,23 @@ const App = () => {
       <DisplayText elementType= "p" text="Hello Mortal" />
       <DisplayText elementType= "h1" text='I said, HELLO MORTAL!' />
       <hr />
-      <List />
+      <CountButton />
+      <List list={stories} />
     </div>
   );
+}
+
+const CountButton = () => {
+  const [count, setCount] = React.useState(0);
+  const handleClick = () => {
+    setCount(count+1);
+  }
+  return (
+    <div>
+      <button type='button' onClick={handleClick}>Count clicks lol</button>
+      Count: {count}
+    </div>
+  )
 }
 const Search = () => {
   const [inputText, setInputText] = React.useState('');
@@ -83,23 +100,39 @@ const Search = () => {
 );
 } 
 
-const List = () => {
+const List = (props) => {
   return (
     <ul>  
-        {list.map((item) => {
+        {props.list.map((item) => {
           return (
-            <li key={item.objectID}>
-              <span>
-                <a href={item.url}>{item.title}</a>
-              </span>
-              <span>{item.author}</span>
-              <span>{item.num_comments}</span>
-              <span>{item.points}</span>
-            </li>
+            <Item key = {item.objectID} item={item} />
+
           );
         })}
       </ul>
   )
+}
+
+const Item = (props) => {
+  return (
+    <li>
+    <span>
+      <a href={props.item.url}>{props.item.title}</a>
+    </span>
+    <span>{props.item.author}</span>
+    <span>{props.item.num_comments}</span>
+    <span>{props.item.points}</span>
+  </li>
+  );
+}
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired, 
+}
+
+
+List.propTypes = {
+  list: PropTypes.array.isRequired, 
 }
 
 export default App;
